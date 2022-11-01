@@ -1,16 +1,17 @@
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
 public class SIM {
-    private int phoneNumber;
+    private String phoneNumber;
     private float credit;
 
-    private String[] outgoingIDs = new String[10];
-    private int[] outgoingTime = new int[10];
+    private final String[] outgoingIDs = new String[10];
+    private final int[] outgoingTime = new int[10];
+    private int outgoingIndex = 0;
 
-    private static int index=0;
+    //    Array of existing phone numbers and index
     private final static String[] phoneNumbers = new String[10];
+    private static int phoneNumbersIndex = 0;
 
     private static boolean checkPhoneNumber(String tempNumber) {
         for (String i : phoneNumbers) {
@@ -21,20 +22,43 @@ public class SIM {
         return true;
     }
 
-    public SIM() {
+    private String generatePhoneNumber() {
         Random random = new Random();
-        String tempNumber = String.format("369%d", random.nextInt(9999999));
-
-        System.out.println(tempNumber);
-        if (checkPhoneNumber(tempNumber)) {
-            phoneNumbers[index] = tempNumber;
-            index++;
-        }
-
-        credit = 0;
+        return String.format("369%d", random.nextInt(9999999));
     }
 
-    public void addCredit() {
-        /* todo */
+    private String newPhoneNumber() {
+        String tempNumber = generatePhoneNumber();
+        while (!checkPhoneNumber(tempNumber)) {
+            tempNumber = generatePhoneNumber();
+        }
+        return tempNumber;
+    }
+
+    public SIM() {
+        String tempNumber = newPhoneNumber();
+        phoneNumbers[phoneNumbersIndex] = tempNumber;
+        phoneNumber = tempNumber;
+        phoneNumbersIndex++;
+
+        credit = 5.00F;
+    }
+
+    public void addCredit(float creditToAdd) {
+        if (creditToAdd > 0) {
+            credit += creditToAdd;
+        }
+    }
+
+    public void makeCall(String callerID, int callDuration) {
+        outgoingIDs[outgoingIndex] = callerID;
+        outgoingTime[outgoingIndex] = callDuration;
+        outgoingIndex++;
+    }
+
+    public void getOutgoingList() {
+        for (int i = 0; i < outgoingIndex; i++) {
+            System.out.printf("%d. To: %s -> %dmin", i, outgoingIDs[i], outgoingTime[i]);
+        }
     }
 }
