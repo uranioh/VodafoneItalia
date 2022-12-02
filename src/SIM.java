@@ -2,7 +2,7 @@ import java.util.Objects;
 import java.util.Random;
 
 public class SIM {
-    private String phoneNumber;
+    private final String phoneNumber;
     private float credit;
 
     private final String[] outgoingIDs = new String[10];
@@ -14,8 +14,8 @@ public class SIM {
     private static int phoneNumbersIndex = 0;
 
     private static boolean checkPhoneNumber(String tempNumber) {
-        for (String i : phoneNumbers) {
-            if (Objects.equals(tempNumber, i)) {
+        for (String num : phoneNumbers) {
+            if (Objects.equals(tempNumber, num)) {
                 return false;
             }
         }
@@ -58,7 +58,15 @@ public class SIM {
 
     public void getOutgoingList() {
         for (int i = 0; i < outgoingIndex; i++) {
-            System.out.printf("%d. To: %s -> %dmin", i, outgoingIDs[i], outgoingTime[i]);
+            System.out.printf("%d. To: %s -> %dmin %n", i, outgoingIDs[i], outgoingTime[i]);
         }
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public float getCredit() {
+        return credit;
     }
 }
